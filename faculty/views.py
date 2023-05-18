@@ -106,6 +106,9 @@ def join_school(request):
 def faculties_configure(request):
     if request.method == 'POST':
         print(request.POST.getlist('faculty'))
+        #
+        #code
+        #
     context = {'title': 'Configure faculties'}
     return render(request, 'faculty/faculties_configure.html', context)
 

@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django_countries.fields import CountryField
 
+from .validators import *
 
 # Create your models here.
 
@@ -48,6 +49,9 @@ class House(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ('school', 'name',)
 
 
 # class Action(models.Model):

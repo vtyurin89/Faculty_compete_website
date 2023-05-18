@@ -71,3 +71,11 @@ class CreateSchoolForm(ModelForm):
         if commit:
             my_form_object.save()
         return my_form_object
+
+
+class CreateHouseForm(ModelForm):
+
+    class Meta:
+        model = House
+        fields = ["name",]
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control', 'name': 'name'}),}
