@@ -1,0 +1,36 @@
+@media screen and (max-width: 600px) {
+body {
+    min-width: 320px;
+    margin: auto;
+}
+}
+
+@media screen and (min-width: 1333px) {
+body {
+    min-width: 320px;
+    max-width: 1333px;
+    margin: auto;
+}
+}
+
+
+main {
+    min-height: 100vh;
+}
+
+.mainthing {
+    min-height: 50vh;
+}
+
+.card {
+    height: 150px;
+}
+
+.card:hover {
+    box-shadow: 0 14px 30px -15px rgba(0, 0, 0, 0.75);
+    transition: all .3s;
+}
+
+.no-decor {
+    text-decoration: none;
+}

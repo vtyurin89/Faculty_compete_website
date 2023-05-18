@@ -1,0 +1,28 @@
+{% extends 'faculty/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container w-50 mt-5 text-center">
+  {% if user.is_authenticated %}
+    <p>You have already logged in!</p>
+    {% else %}
+<form method="post">
+  {% csrf_token %}
+
+    <div>{{ form.non_field_errors }}</div>
+    {% for part in form %}
+    <p>{{ part }} </p>
+    <div>{{ part.errors }}</div>
+    {% endfor %}
+  <!-- Register buttons -->
+  <div class="text-center">
+    <p>Not a member? <a href="{% url 'register' %}">Register then</a></p>
+  </div>
+  <button type="submit" class="btn btn-dark btn-primary btn-block">Войти</button>
+</form>
+  {% endif %}
+</div>
+
+
+{% endblock %}
