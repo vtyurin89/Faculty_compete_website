@@ -34,3 +34,10 @@ main {
 .no-decor {
     text-decoration: none;
 }
+
+.nav-link {
+    font-size: 1.5 em;
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+}

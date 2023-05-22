@@ -40,28 +40,43 @@ class Grade(models.Model):
     def __str__(self):
         return self.name
 
+#slug generation functions in utils.py
+
 
 class House(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     points = models.IntegerField(default=0)
-    slug = models.SlugField(max_length=100, unique=True, db_index=True, verbose_name='URL')
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, blank=True, null=True, verbose_name='URL')
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.points < 0:
+            self.points = 0
+        return super().save(*args, **kwargs)
+
 
     class Meta:
         unique_together = ('school', 'name',)
 
 
-# class Action(models.Model):
-#     teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE)
-#     faculty = models.ForeignKey('House', on_delete=models.CASCADE)
-#     grade = models.ForeignKey('Grade', on_delete=models.CASCADE)
-#     change = models.IntegerField()
-#     timestamp = models.DateTimeField()
-#     comment = models.TextField(max_length=1000)
-#
-#     def __str__(self):
-#         return '(%s) %d to %s' % (self.teacher, self.change, self.faculty)
+class Action(models.Model):
+    KINDS = (
+        ('a', 'award'),
+        ('b', 'deduct'),
+    )
+    teacher = models.ForeignKey('Teacher', blank=True, null=True, on_delete=models.CASCADE)
+    faculty = models.ForeignKey('House', blank=True, null=True, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField()
+    action_type = models.CharField(max_length=1, choices=KINDS, default='a')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField(max_length=1000, blank=True, null=True,)
+
+    def __str__(self):
+        if self.action_type == 'a':
+            return '{} awarded {} points to {}.'.format(self.teacher, self.amount, self.faculty)
+        else:
+            return '{} deducted {} points from {}.'.format(self.teacher, self.amount, self.faculty)
 

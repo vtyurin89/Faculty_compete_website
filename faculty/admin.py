@@ -10,5 +10,16 @@ class TeacherAdmin(admin.ModelAdmin):
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('name', 'country', 'city', 'about', 'creation_date', 'secret_key', 'is_activated')
 
+
+class HouseAdmin(admin.ModelAdmin):
+    list_display = ('name', 'school', 'points')
+
+
+class ActionAdmin(admin.ModelAdmin):
+    list_display = ('teacher', 'faculty', 'amount', 'action_type', 'timestamp',)
+
+
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(School, SchoolAdmin)
+admin.site.register(House, HouseAdmin)
+admin.site.register(Action, ActionAdmin)

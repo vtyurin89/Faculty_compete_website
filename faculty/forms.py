@@ -37,7 +37,6 @@ class RegisterTeacherForm(UserCreationForm):
             teacher.save()
         return teacher
 
-
     class Meta:
         model = Teacher
         fields = ('username', 'email', 'password1', 'password2')
@@ -49,6 +48,9 @@ class LoginTeacherForm(AuthenticationForm):
 
 
 class CreateSchoolForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user_id = kwargs.pop("user_id", None)
+        super(CreateSchoolForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = School
@@ -70,6 +72,7 @@ class CreateSchoolForm(ModelForm):
                 break
         if commit:
             my_form_object.save()
+        Teacher.objects.filter(pk=self.user_id).update(school_id=my_form_object.pk)
         return my_form_object
 
 
@@ -79,3 +82,5 @@ class CreateHouseForm(ModelForm):
         model = House
         fields = ["name",]
         widgets = {'name': forms.TextInput(attrs={'class': 'form-control', 'name': 'name'}),}
+
+
