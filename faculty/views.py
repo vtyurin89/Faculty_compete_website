@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.db.models import F
+from django.db.models import Max, Q
 from .utils import *
 from .forms import *
 from .models import *
@@ -42,7 +42,17 @@ def index(request):
         return redirect('index')
     else:
         latest_action_list = Action.objects.filter(faculty__school=request.user.school).order_by('-id')[:10]
-        context = {'title': 'Main page', 'faculty_list': faculty_list, 'action_list': latest_action_list}
+        winning_house = House.objects.filter(Q(school=request.user.school.pk) & Q(points__gte=House.objects.aggregate(Max('points')).get('points__max')))
+        our_houses = House.objects.filter(school=request.user.school.pk).order_by('-points')
+        house_scores = [house.points for house in our_houses]
+        house_names = [house.name for house in our_houses]
+        context = {'title': 'Main page',
+                   'faculty_list': faculty_list,
+                   'action_list': latest_action_list,
+                   'winning_house': winning_house,
+                   'house_scores': house_scores,
+                   'house_names': house_names,
+                   }
         return render(request, 'faculty/index.html', context)
 
 
@@ -160,3 +170,7 @@ def faculties_configure(request):
     context = {'title': 'Configure faculties'}
     return render(request, 'faculty/faculties_configure.html', context)
 
+@login_required
+def profile_main_data(request):
+    context = {'title': 'Account information'}
+    return render(request, 'faculty/profile_main_data.html', context)

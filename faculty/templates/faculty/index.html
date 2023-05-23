@@ -3,12 +3,13 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="mt-5 ms-3">
+<div class="m-5">
 <h4>Welcome, {{ user.username }}!</h4>
 <h5 class="mt-3"> Ready to rock?</h5>
 </div>
 <div class="mainthing mt-3 bg-light p-5">
 <div class="container">
+
 
 <!-- User joined school, can award points -->
 {% if user.school %}
@@ -94,6 +95,8 @@
 </div>
 </div>
 
+
+<!-- recent actions -->
 {% if user.school %}
 <h5 class="mt-5">Recent actions:</h5>
 <div class="container bg-light p-5">
@@ -105,6 +108,60 @@
     <p>No actions...</p>
     {% endif %}
 </div>
+
+<!-- current winner -->
+<h5 class="mt-5">Current winner:</h5>
+<div class="container bg-light p-5 text-center">
+    {% if winning_house and winning_house|length == 1 %}
+    <h3>{{ winning_house.0.name }}</h3>
+    <p>with {{ winning_house.0.points }} points</p>
+    <p>Good job, {{ winning_house.0.name }}, keep it up!</p>
+    {% elif winning_house and winning_house|length > 1 %}
+    <h5>No leader right now...</h5>
+    <p>{% for house in winning_house %}
+        {% if not forloop.last %}
+    {{ house.name }},
+        {% else %}
+    {{ house.name }}
+    {% endif %}
+        {% endfor %} are the main contenders.</p>
+    {% endif %}
+</div>
+
+<!-- School graph -->
+<h5 class="mt-5">Graph:</h5>
+<div class="container bg-light p-5 text-center">
+    <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
+</div>
+
+{% block scripts %}
+<script>
+
+var xValues = {{ house_names|safe }};
+var yValues = {{ house_scores|safe }};
+var barColors = "blue";
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "FACULTY COMPETITION"
+    }
+  }
+});
+</script>
+
+{% endblock scripts %}
+
 {% endif %}
 
 {% endblock %}

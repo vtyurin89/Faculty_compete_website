@@ -22,6 +22,10 @@ main {
     min-height: 50vh;
 }
 
+.mainthing-profile {
+    min-height: 90vh;
+}
+
 .card {
     height: 150px;
 }
@@ -41,3 +45,8 @@ main {
     padding-left: 40px;
     padding-right: 40px;
 }
+
+canvas {
+        margin-right: auto;
+        margin-left: auto;
+    }
