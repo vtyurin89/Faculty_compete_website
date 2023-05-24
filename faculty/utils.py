@@ -1,6 +1,13 @@
 from django.template.defaultfilters import slugify
 from .models import *
 
+#sidebar in account settings
+profile_sidebar = [{'title': "User profile", 'url_name': 'profile_main_data', 'sidebar_pos': 1},
+                   {'title': "School information", 'url_name': 'profile_user_school', 'sidebar_pos': 2},
+                   {'title': "Recent actions", 'url_name': 'profile_recent_actions', 'sidebar_pos': 3},
+                   {'title': "Safety", 'url_name': 'profile_change_password', 'sidebar_pos': 4},
+]
+
 
 #slug generation
 def translate_cyrillic_slug(faculty, school):

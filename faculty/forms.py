@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django_countries.widgets import CountrySelectWidget
@@ -83,4 +83,9 @@ class CreateHouseForm(ModelForm):
         fields = ["name",]
         widgets = {'name': forms.TextInput(attrs={'class': 'form-control', 'name': 'name'}),}
 
+
+class ProfileChangePassword(PasswordChangeForm):
+    old_password = forms.CharField(label='Old password', max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password1 = forms.CharField(label='New password', max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password2 = forms.CharField(label='Repeat password', max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 

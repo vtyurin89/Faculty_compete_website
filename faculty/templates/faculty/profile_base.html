@@ -1,0 +1,41 @@
+{% extends 'faculty/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="mainthing-profile mt-5 p-5">
+    <div class="row" style="height: 100%;">
+
+      <!-- profile sidebar menu -->
+    <div class="d-flex flex-column flex-shrink-0 p-5 bg-light" style="width: 340px; height: 100%;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+      <span class="fs-4">{{ user.username }}</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      {% for item in profile_sidebar %}
+        {% if item.sidebar_pos == context_sidebar_pos %}
+       <li class="nav-item">
+        <a href="{% url item.url_name %}" class="nav-link active" aria-current="page">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+          {{ item.title }}
+        </a>
+      </li>
+          {% else %}
+      <li>
+        <a href="{% url item.url_name %}" class="nav-link link-dark">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+          {{ item.title }}
+        </a>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+
+
+
+
+{% endblock content %}

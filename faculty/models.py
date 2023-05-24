@@ -80,3 +80,9 @@ class Action(models.Model):
         else:
             return '{} deducted {} points from {}.'.format(self.teacher, self.amount, self.faculty)
 
+
+    def my_profile_action(self):
+        if self.action_type == 'a':
+            return 'You awarded {} points to {}.'.format(self.amount, self.faculty)
+        else:
+            return 'You deducted {} points from {}.'.format(self.amount, self.faculty)

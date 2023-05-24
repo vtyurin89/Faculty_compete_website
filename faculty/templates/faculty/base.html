@@ -65,8 +65,8 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end">
             <li><a class="dropdown-item" href="{% url 'profile_main_data' %}">Profile</a></li>
-            <li><a class="dropdown-item" href="#">My school</a></li>
-            <li><a class="dropdown-item" href="#">Recent actions</a></li>
+            <li><a class="dropdown-item" href="{% url 'profile_user_school' %}">My school</a></li>
+            <li><a class="dropdown-item" href="{% url 'profile_recent_actions' %}">Recent actions</a></li>
               <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
       </ul>

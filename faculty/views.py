@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import authenticate, logout, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Max, Q
+from django.core.paginator import Paginator
 from .utils import *
 from .forms import *
 from .models import *
@@ -170,7 +171,49 @@ def faculties_configure(request):
     context = {'title': 'Configure faculties'}
     return render(request, 'faculty/faculties_configure.html', context)
 
+
 @login_required
 def profile_main_data(request):
-    context = {'title': 'Account information'}
+    context = {'title': 'Account settings', 'profile_sidebar': profile_sidebar, 'context_sidebar_pos': 1}
     return render(request, 'faculty/profile_main_data.html', context)
+
+
+@login_required
+def profile_user_school(request):
+    my_school = School.objects.filter(pk=request.user.school_id)[0]
+    context = {'title': 'School information',
+               'my_school': my_school,
+               'profile_sidebar': profile_sidebar,
+               'context_sidebar_pos': 2}
+    return render(request, 'faculty/profile_user_school.html', context)
+
+
+@login_required
+def profile_recent_actions(request):
+    user_action_list = Action.objects.filter(Q(teacher=request.user) & Q(faculty__school=request.user.school)).order_by('-id')
+
+    pagination_range = 15
+    paginator = Paginator(user_action_list, pagination_range)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {'title': 'Your recent actions',
+               'user_action_list': user_action_list,
+               'profile_sidebar': profile_sidebar,
+               'context_sidebar_pos': 3,
+               'page_obj': page_obj}
+    return render(request, 'faculty/profile_recent_actions.html', context)
+
+
+@login_required
+def profile_change_password(request):
+    form = ProfileChangePassword(user=request.user, data=request.POST or None)
+    if form.is_valid():
+        form.save()
+        update_session_auth_hash(request, form.user)
+        messages.success(request, "Password changed")
+        return redirect('profile_change_password')
+    context = {'title': 'Change password',
+               'profile_sidebar': profile_sidebar,
+               'form': form,
+               'context_sidebar_pos': 4}
+    return render(request, 'faculty/profile_change_password.html', context)
