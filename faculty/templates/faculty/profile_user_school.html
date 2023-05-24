@@ -1,0 +1,83 @@
+{% extends 'faculty/profile_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{{ block.super }}
+      <!-- profile main -->
+      <section class="col p-5 ms-3 bg-light" style="height: 100%;">
+      <h5> {{ title }} </h5>
+      <div class="container mt-5">
+
+      {% if my_school %}
+      <!-- School -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Your school:</h5>
+      </div>
+      <div class="col">
+      <p>{{ my_school.name }}</p>
+      </div>
+      </div>
+
+      <!-- Creation date -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Created:</h5>
+      </div>
+      <div class="col">
+      <p>{{ my_school.creation_date }}</p>
+      </div>
+      </div>
+
+      <!-- Location, country -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Country:</h5>
+      </div>
+      <div class="col">
+      <p>{{ my_school.country }}</p>
+      </div>
+      </div>
+
+      <!-- Location, city -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>City:</h5>
+      </div>
+      <div class="col">
+      <p>{{ my_school.city }}</p>
+      </div>
+      </div>
+
+      <hr class="mt-5">
+      <!-- Secret key -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Secret key:</h5>
+      </div>
+      <div class="col">
+            <p><b>{{ my_school.secret_key }}</b></p>
+      </div>
+      </div>
+
+      <hr class="mt-5">
+      <!-- Additional information -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Additional information:</h5>
+      </div>
+      <div class="col">
+      <p>{{ my_school.about }}</p>
+      </div>
+      </div>
+      {% else %}
+            <p>You don't have a school yet...</p>
+      {% endif %}
+
+<!-- end profile main -->
+</div>
+</section>
+</div>
+</div>
+{% endblock content %}
