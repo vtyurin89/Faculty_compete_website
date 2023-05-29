@@ -89,3 +89,19 @@ class ProfileChangePassword(PasswordChangeForm):
     new_password1 = forms.CharField(label='New password', max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     new_password2 = forms.CharField(label='Repeat password', max_length=255, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
+
+class ProfileConfigureTeacher(ModelForm):
+    first_name = forms.CharField(label='First name', max_length=255, required=False,
+                                 widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'first_name'}))
+    last_name = forms.CharField(label='Last name', max_length=255, required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'last_name'}))
+    email = forms.EmailField(label='Email', required=True,
+                             widget=forms.EmailInput(attrs={'class': 'form-control', 'name': 'email'}))
+    teacher_image = forms.ImageField(label='Profile picture', required=False,
+                             widget=forms.FileInput(attrs={'class': 'form-control', 'name': 'teacher_image'}))
+
+
+    class Meta:
+        model = Teacher
+        fields = ('first_name', 'last_name', 'email', 'teacher_image')
+

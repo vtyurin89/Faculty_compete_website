@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Max, Q
 from django.core.paginator import Paginator
+from easy_thumbnails.files import get_thumbnailer
 from .utils import *
 from .forms import *
 from .models import *
@@ -28,7 +29,7 @@ def index(request):
         if new_action_amount and int(new_action_amount) > 500000:
             messages.error(request, 'Sorry, cannot award or deduct THAT many points')
         elif new_action_amount and int(new_action_amount) > 0:
-            Action.objects.create(
+            new_action_record = Action.objects.create(
                 faculty=new_action_faculty,
                 teacher=request.user,
                 amount=new_action_amount,
@@ -40,6 +41,7 @@ def index(request):
             else:
                 house_makechange.points = house_makechange.points - int(new_action_amount)
             house_makechange.save()
+            messages.success(request, f"{new_action_record.my_profile_action()}")
         return redirect('index')
     else:
         latest_action_list = Action.objects.filter(faculty__school=request.user.school).order_by('-id')[:10]
@@ -174,7 +176,20 @@ def faculties_configure(request):
 
 @login_required
 def profile_main_data(request):
-    context = {'title': 'Account settings', 'profile_sidebar': profile_sidebar, 'context_sidebar_pos': 1}
+    current_teacher_user = Teacher.objects.get(pk=request.user.id)
+
+    if request.method == "POST":
+        form = ProfileConfigureTeacher(request.POST, request.FILES, instance=current_teacher_user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, current_teacher_user)
+            messages.success(request, "Profile updated.")
+            return redirect('profile_main_data')
+    form = ProfileConfigureTeacher(instance=current_teacher_user)
+    context = {'title': 'Account settings',
+               'form': form,
+               'profile_sidebar': profile_sidebar,
+               'context_sidebar_pos': 1}
     return render(request, 'faculty/profile_main_data.html', context)
 
 
@@ -206,14 +221,17 @@ def profile_recent_actions(request):
 
 @login_required
 def profile_change_password(request):
-    form = ProfileChangePassword(user=request.user, data=request.POST or None)
-    if form.is_valid():
-        form.save()
-        update_session_auth_hash(request, form.user)
-        messages.success(request, "Password changed")
-        return redirect('profile_change_password')
-    context = {'title': 'Change password',
+    if request.method == 'POST':
+        form = ProfileChangePassword(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, "Password changed")
+            return redirect('profile_change_password')
+    else:
+        form = ProfileChangePassword(user=request.user)
+        context = {'title': 'Change password',
                'profile_sidebar': profile_sidebar,
                'form': form,
                'context_sidebar_pos': 4}
-    return render(request, 'faculty/profile_change_password.html', context)
+        return render(request, 'faculty/profile_change_password.html', context)

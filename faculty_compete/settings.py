@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'faculty.apps.FacultyConfig',
     'bootstrap5',
     'django_countries',
+    'django_cleanup',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'faculty.middlewares.teacher_data_context_processor'
             ],
         },
     },
@@ -124,6 +127,10 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = ''
 
@@ -132,3 +139,19 @@ LOGIN_REDIRECT_URL = ''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+THUMBNAIL_ALIASES = {
+   '': {
+       'default': {
+           'size': (96, 96),
+           'crop': 'smart',
+       },
+       'small': {
+            'size': (35, 35),
+            'crop': 'smart',
+       },
+   }
+}
+
+THUMBNAIL_BASEDIR = 'thumbnails'
+THUMBNAIL_DEFAULT_OPTIONS = {'quality': 90, 'subsampling': 1,}

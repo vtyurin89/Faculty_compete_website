@@ -7,8 +7,14 @@ from .validators import *
 # Create your models here.
 
 
+def user_image_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'images/user_{0}/{1}'.format(instance.username, filename)
+
+
 class Teacher(AbstractUser):
     school = models.ForeignKey('School', blank=True, null=True, on_delete=models.SET_NULL)
+    teacher_image = models.ImageField(null=True, blank=True, upload_to=user_image_path, verbose_name='Profile image')
 
     class Meta(AbstractUser.Meta):
         pass
