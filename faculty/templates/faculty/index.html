@@ -36,8 +36,8 @@
      <form method='post'>
          {% csrf_token %}
     <input class="form-control form-control-lg" type="number" placeholder="" aria-label=".form-control-lg example" name="{{ item.slug }}">
-    <button type="submit" name="award" class="btn btn-primary mt-3">Award</button>
-    <button type="submit" name="deduct" class="btn btn-danger mt-3">Deduct</button>
+    <button type="submit" name="award" class="btn btn-primary mt-3 pe-5 ps-5">Award</button>
+    <button type="submit" name="deduct" class="btn btn-danger mt-3 pe-5 ps-5">Deduct</button>
     </form>
 
     </div>
@@ -47,8 +47,8 @@
       <form method='post'>
          {% csrf_token %}
     <input class="form-control form-control-lg" type="number" placeholder="" aria-label=".form-control-lg example" name="{{ item.slug }}">
-    <button type="submit" name="award" class="btn btn-primary mt-3">Award</button>
-    <button type="submit" name="deduct" class="btn btn-danger mt-3">Deduct</button>
+    <button type="submit" name="award" class="btn btn-primary mt-3 pe-5 ps-5">Award</button>
+    <button type="submit" name="deduct" class="btn btn-danger mt-3 pe-5 ps-5">Deduct</button>
     </form>
 
       </div>
@@ -98,7 +98,7 @@
 
 <!-- recent actions -->
 {% if user.school %}
-<h5 class="mt-5">Recent actions:</h5>
+<h5 class="mt-5 ms-5">Recent actions:</h5>
 <div class="container bg-light p-5">
     {% if action_list %}
     {% for action in action_list %}
@@ -110,8 +110,10 @@
 </div>
 
 <!-- current winner -->
-<h5 class="mt-5">Current winner:</h5>
+
+<h5 class="mt-5 ms-5">Current winner:</h5>
 <div class="container bg-light p-5 text-center">
+{% if winning_house %}
     {% if winning_house and winning_house|length == 1 %}
     <h3>{{ winning_house.0.name }}</h3>
     <p>with {{ winning_house.0.points }} points</p>
@@ -126,13 +128,23 @@
     {% endif %}
         {% endfor %} are the main contenders.</p>
     {% endif %}
+{% else %}
+    <h5>The competition is about to start...</h5>
+{% endif %}
 </div>
 
 <!-- School graph -->
-<h5 class="mt-5">Graph:</h5>
+
+
+<h5 class="mt-5 ms-5">Graph:</h5>
 <div class="container bg-light p-5 text-center">
+    {% if house_scores %}
     <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
+    {% else %}
+    <p>Nothing to show yet...</p>
+    {% endif %}
 </div>
+
 
 {% block scripts %}
 <script>

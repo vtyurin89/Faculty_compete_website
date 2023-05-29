@@ -2,10 +2,6 @@ from .models import *
 from easy_thumbnails.files import get_thumbnailer
 
 
-menu = [{'title':"Главная страница", 'url_name': 'index'},
-        {'title':"Добавить объявление", 'url_name': 'index'},]
-
-
 def teacher_data_context_processor(request):
     if request.user.is_authenticated:
         if request.user.teacher_image:
@@ -22,7 +18,7 @@ def teacher_data_context_processor(request):
                 return {'thumbnail_small_url': "/media/images/avatar_default_small.png",
                         'thumbnail_default_url': "/media/images/avatar_default_default.png",
                         'no_image': no_image}
-        no_image = True
-        return {'thumbnail_small_url': "/media/images/avatar_default_small.png",
-                'thumbnail_default_url': "/media/images/avatar_default_default.png",
-                'no_image': no_image}
+    no_image = True
+    return {'thumbnail_small_url': "/media/images/avatar_default_small.png",
+            'thumbnail_default_url': "/media/images/avatar_default_default.png",
+            'no_image': no_image}

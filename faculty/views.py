@@ -26,7 +26,7 @@ def index(request):
                 new_action_type = 'b'
                 break
         new_action_amount = request.POST[new_action_faculty.slug]
-        if new_action_amount and int(new_action_amount) > 500000:
+        if new_action_amount and int(new_action_amount) > 50000:
             messages.error(request, 'Sorry, cannot award or deduct THAT many points')
         elif new_action_amount and int(new_action_amount) > 0:
             new_action_record = Action.objects.create(
@@ -44,11 +44,17 @@ def index(request):
             messages.success(request, f"{new_action_record.my_profile_action()}")
         return redirect('index')
     else:
-        latest_action_list = Action.objects.filter(faculty__school=request.user.school).order_by('-id')[:10]
-        winning_house = House.objects.filter(Q(school=request.user.school.pk) & Q(points__gte=House.objects.aggregate(Max('points')).get('points__max')))
-        our_houses = House.objects.filter(school=request.user.school.pk).order_by('-points')
-        house_scores = [house.points for house in our_houses]
-        house_names = [house.name for house in our_houses]
+        if request.user.school:
+            latest_action_list = Action.objects.filter(faculty__school=request.user.school).order_by('-id')[:10]
+            winning_house = House.objects.filter(Q(school=request.user.school) & Q(points__gte=House.objects.aggregate(Max('points')).get('points__max')))
+            our_houses = House.objects.filter(school=request.user.school).order_by('-points')
+            house_scores = [house.points for house in our_houses]
+            house_names = [house.name for house in our_houses]
+        else:
+            latest_action_list = None
+            winning_house = None
+            house_scores = None
+            house_names = None
         context = {'title': 'Main page',
                    'faculty_list': faculty_list,
                    'action_list': latest_action_list,
@@ -78,6 +84,7 @@ def login_teacher(request):
         return render(request, 'faculty/login.html', context)
     else:
         form = LoginTeacherForm()
+        print(request)
         context = {'title': 'Login', 'form': form}
         return render(request, 'faculty/login.html', context)
 
@@ -195,7 +202,10 @@ def profile_main_data(request):
 
 @login_required
 def profile_user_school(request):
-    my_school = School.objects.filter(pk=request.user.school_id)[0]
+    if request.user.school:
+        my_school = School.objects.filter(pk=request.user.school_id)[0]
+    else:
+        my_school = None
     context = {'title': 'School information',
                'my_school': my_school,
                'profile_sidebar': profile_sidebar,

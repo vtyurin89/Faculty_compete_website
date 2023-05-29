@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django_countries.fields import CountryField
+from easy_thumbnails.fields import ThumbnailerImageField
+from easy_thumbnails.files import get_thumbnailer
 
 from .validators import *
 
@@ -14,17 +16,11 @@ def user_image_path(instance, filename):
 
 class Teacher(AbstractUser):
     school = models.ForeignKey('School', blank=True, null=True, on_delete=models.SET_NULL)
-    teacher_image = models.ImageField(null=True, blank=True, upload_to=user_image_path, verbose_name='Profile image')
+    teacher_image = ThumbnailerImageField(null=True, blank=True, upload_to=user_image_path, verbose_name='Profile image')
+
 
     class Meta(AbstractUser.Meta):
         pass
-
-
-class Director(Teacher):
-    pass
-
-    class Meta:
-        proxy = True
 
 
 class School(models.Model):
@@ -38,15 +34,6 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Grade(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-#slug generation functions in utils.py
 
 
 class House(models.Model):

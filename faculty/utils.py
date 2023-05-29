@@ -1,7 +1,9 @@
 from pathlib import Path
 
 from django.template.defaultfilters import slugify
-from django_cleanup.signals import cleanup_post_delete
+from django_cleanup.signals import cleanup_post_delete, cleanup_pre_delete
+from easy_thumbnails.files import get_thumbnailer
+
 from .models import *
 import os
 
@@ -37,12 +39,8 @@ def create_unique_slug(faculty, school):
 
 
 def thumbnail_auto_delete(**kwargs):
-    picture_original = kwargs['file_name']
-    thumbnail_templates = picture_original
-    print('filename:', kwargs['file_name'])
+    teacher_instance = kwargs['instance']
+    print(teacher_instance)
+    teacher_instance.teacher_image.delete_thumbnails()
 
-
-    print(kwargs)
-
-
-cleanup_post_delete.connect(thumbnail_auto_delete)
+cleanup_pre_delete.connect(thumbnail_auto_delete)
