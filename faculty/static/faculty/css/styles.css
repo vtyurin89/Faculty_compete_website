@@ -1,3 +1,12 @@
+/* Custom font */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Eczar:wght@700&display=swap');
+
+
+
+.logo {
+    font-family: 'Archivo', sans-serif;
+}
+
 html {
     font-size: 110%;
 }
@@ -23,7 +32,7 @@ main {
 }
 
 .mainthing {
-    min-height: 50vh;
+    min-height: 25vh;
 }
 
 .mainthing-profile {

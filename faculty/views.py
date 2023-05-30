@@ -44,9 +44,9 @@ def index(request):
             messages.success(request, f"{new_action_record.my_profile_action()}")
         return redirect('index')
     else:
-        if request.user.school:
+        if request.user.school and request.user.school.is_activated:
             latest_action_list = Action.objects.filter(faculty__school=request.user.school).order_by('-id')[:10]
-            winning_house = House.objects.filter(Q(school=request.user.school) & Q(points__gte=House.objects.aggregate(Max('points')).get('points__max')))
+            winning_house = House.objects.filter(Q(school=request.user.school) & Q(points__gte=House.objects.filter(school=request.user.school).aggregate(Max('points')).get('points__max')))
             our_houses = House.objects.filter(school=request.user.school).order_by('-points')
             house_scores = [house.points for house in our_houses]
             house_names = [house.name for house in our_houses]
@@ -204,10 +204,13 @@ def profile_main_data(request):
 def profile_user_school(request):
     if request.user.school:
         my_school = School.objects.filter(pk=request.user.school_id)[0]
+        my_school_faculties = House.objects.filter(school=my_school)
     else:
         my_school = None
+        my_school_faculties = None
     context = {'title': 'School information',
                'my_school': my_school,
+               'my_school_faculties': my_school_faculties,
                'profile_sidebar': profile_sidebar,
                'context_sidebar_pos': 2}
     return render(request, 'faculty/profile_user_school.html', context)

@@ -5,7 +5,7 @@
 {% block content %}
 {{ block.super }}
       <!-- profile main -->
-      <section class="col p-5 ms-3 bg-light" style="height: 100%;">
+      <section class="col p-5 ms-3 bg-light border border-3" style="height: 100%;">
       <h5> {{ title }} </h5>
       <div class="container mt-5">
 
@@ -58,6 +58,19 @@
       </div>
       <div class="col">
             <p><b>{{ my_school.secret_key }}</b></p>
+      </div>
+      </div>
+
+      <hr class="mt-5">
+      <!-- Faculties -->
+      <div class="row p-0">
+      <div class="col">
+      <h5>Faculties:</h5>
+      </div>
+      <div class="col">
+            {% for faculty in my_school_faculties %}
+            <p>{{ faculty }}</p>
+            {% endfor %}
       </div>
       </div>
 

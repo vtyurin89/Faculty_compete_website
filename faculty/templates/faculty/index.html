@@ -4,21 +4,24 @@
 
 {% block content %}
 <div class="m-5">
-<h4>Welcome, {{ user.username }}!</h4>
-<h5 class="mt-3"> Ready to rock?</h5>
-</div>
-<div class="mainthing mt-3 bg-light p-5">
-<div class="container">
 
 
 <!-- User joined school, can award points -->
+<!-- Award points bar -->
 {% if user.school %}
+<h4>Welcome, {{ user.username }}!</h4>
 <h5>Your school is {{ user.school }}.</h5>
+</div>
+
 
 {% if user.school.is_activated %}
-    <div class="mt-5">
-        <h5>Your faculties:</h5>
-        <div class="d-flex align-items-start mt-5">
+<h5 class="mt-5 ms-5">Your faculties:</h5>
+<div class="mainthing bg-light p-5 border border-3">
+<div class="container">
+    <div class="">
+    <div class="container text-center">
+    <div class="row">
+    <div class="col-4 text-center">
   <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical">
     {% for item in faculty_list %}
         {% if forloop.first %}
@@ -28,10 +31,13 @@
       {% endif %}
     {% endfor %}
         </div>
-  <div class="tab-content" id="v-pills-tabContent">
+     </div>
+
+    <div class="col-8">
+  <div class="tab-content ps-5 pe-5 mt-3" id="v-pills-tabContent">
     {% for item in faculty_list %}
       {% if forloop.first %}
-    <div class="tab-pane fade show active" id="v-pills-{{ item.slug }}" role="tabpanel" aria-labelledby="v-pills-{{ item.slug }}-tab"><p>{{ item.name }} currently has {{ item.points }} points.</p>
+    <div class="tab-pane fade show active" id="v-pills-{{ item.slug }}" role="tabpanel" aria-labelledby="v-pills-{{ item.slug }}-tab"><p>{{ item.name }} currently has <b>{{ item.points }}</b> points.</p>
 
      <form method='post'>
          {% csrf_token %}
@@ -42,7 +48,7 @@
 
     </div>
        {% else %}
-      <div class="tab-pane fade" id="v-pills-{{ item.slug }}" role="tabpanel" aria-labelledby="v-pills-{{ item.slug }}-tab"><p>{{ item.name }} currently has {{ item.points }} points.</p>
+      <div class="tab-pane fade" id="v-pills-{{ item.slug }}" role="tabpanel" aria-labelledby="v-pills-{{ item.slug }}-tab"><p>{{ item.name }} currently has <b>{{ item.points }}</b> points.</p>
 
       <form method='post'>
          {% csrf_token %}
@@ -54,14 +60,16 @@
       </div>
   {% endif %}
       {% endfor %}
+      </div>
+        </div>
   </div>
 </div>
 
  <!-- Add faculties -->
  {% else %}
 
-  <div class="mt-3"><h6>Just a few more steps to start giving em points. Add faculties/houses - this will automatically activate school profile.</h6>
-      <button type="button" class="btn btn-primary btn-lg mt-3" onclick="location.href='{% url 'faculties_configure' %}'">Add some faculties.</button>
+  <div class="m-5"><h6>Just one more step left. Add faculties/houses to activate your school profile.</h6>
+      <button type="button" class="btn btn-primary btn-lg mt-3" onclick="location.href='{% url 'faculties_configure' %}'">Add some faculties</button>
   </div>
 
 {% endif %}
@@ -70,9 +78,9 @@
     {% else %}
 <h5>Currently you don't belong to any school.</h5>
 
-    <div class="row mt-3 g-4 ">
+    <div class="row mt-5 g-4 ">
   <div class="col-md-6 col-sm-12 g-4 text-center">
-    <a class="no-decor" href="{% url 'create_school' %}"><div class="card w-75 m-auto">
+    <a class="no-decor" href="{% url 'create_school' %}"><div class="card w-75 m-auto border border-3">
       <div class="card-body">
         <h5 class="card-title">Create new school</h5>
         <p class="card-text">Create a new school profile that others would be able to join.</p>
@@ -80,7 +88,7 @@
     </div></a>
   </div>
   <div class="col-md-6 col-sm-12 g-4 text-center">
-    <a class="no-decor" href="{% url 'join_school' %}"><div class="card w-75 m-auto">
+    <a class="no-decor" href="{% url 'join_school' %}"><div class="card w-75 m-auto border border-3">
       <div class="card-body">
         <h5 class="card-title">Join school</h5>
         <p class="card-text">Find and join the already existing school profile.</p>
@@ -99,7 +107,7 @@
 <!-- recent actions -->
 {% if user.school %}
 <h5 class="mt-5 ms-5">Recent actions:</h5>
-<div class="container bg-light p-5">
+<div class="container bg-light p-5 border border-3">
     {% if action_list %}
     {% for action in action_list %}
     <p><b>{{ action.timestamp }}:</b> {{ action }} </p>
@@ -110,10 +118,9 @@
 </div>
 
 <!-- current winner -->
-
 <h5 class="mt-5 ms-5">Current winner:</h5>
-<div class="container bg-light p-5 text-center">
-{% if winning_house %}
+<div class="container bg-light p-5 text-center border border-3">
+{% if user.school.is_activated%}
     {% if winning_house and winning_house|length == 1 %}
     <h3>{{ winning_house.0.name }}</h3>
     <p>with {{ winning_house.0.points }} points</p>
@@ -129,7 +136,7 @@
         {% endfor %} are the main contenders.</p>
     {% endif %}
 {% else %}
-    <h5>The competition is about to start...</h5>
+    <p>The competition is about to start...</p>
 {% endif %}
 </div>
 
@@ -137,7 +144,7 @@
 
 
 <h5 class="mt-5 ms-5">Graph:</h5>
-<div class="container bg-light p-5 text-center">
+<div class="container bg-light p-5 mb-5 text-center border border-3">
     {% if house_scores %}
     <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
     {% else %}
