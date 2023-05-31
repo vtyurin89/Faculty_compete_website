@@ -16,7 +16,7 @@
 
 {% if user.school.is_activated %}
 <h5 class="mt-5 ms-5">Your faculties:</h5>
-<div class="mainthing bg-light p-5 border border-3">
+<div class="mainthing bg-light p-5 border border-3 rounded-2">
 <div class="container">
     <div class="">
     <div class="container text-center">
@@ -107,7 +107,7 @@
 <!-- recent actions -->
 {% if user.school %}
 <h5 class="mt-5 ms-5">Recent actions:</h5>
-<div class="container bg-light p-5 border border-3">
+<div class="container bg-light p-5 border border-3 rounded-2">
     {% if action_list %}
     {% for action in action_list %}
     <p><b>{{ action.timestamp }}:</b> {{ action }} </p>
@@ -119,7 +119,7 @@
 
 <!-- current winner -->
 <h5 class="mt-5 ms-5">Current winner:</h5>
-<div class="container bg-light p-5 text-center border border-3">
+<div class="container bg-light p-5 text-center border border-3 rounded-2">
 {% if user.school.is_activated%}
     {% if winning_house and winning_house|length == 1 %}
     <h3>{{ winning_house.0.name }}</h3>
@@ -144,7 +144,7 @@
 
 
 <h5 class="mt-5 ms-5">Graph:</h5>
-<div class="container bg-light p-5 mb-5 text-center border border-3">
+<div class="container bg-light p-5 mb-5 text-center border border-3 rounded-2">
     {% if house_scores %}
     <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
     {% else %}

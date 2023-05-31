@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Max, Q
 from django.core.paginator import Paginator
-from easy_thumbnails.files import get_thumbnailer
 from .utils import *
 from .forms import *
 from .models import *
