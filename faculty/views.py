@@ -8,6 +8,8 @@ from .utils import *
 from .forms import *
 from .models import *
 
+
+points_award_limit = 1000
 # Create your views here.
 
 
@@ -25,7 +27,7 @@ def index(request):
                 new_action_type = 'b'
                 break
         new_action_amount = request.POST[new_action_faculty.slug]
-        if new_action_amount and int(new_action_amount) > 50000:
+        if new_action_amount and int(new_action_amount) > points_award_limit:
             messages.error(request, 'Sorry, cannot award or deduct THAT many points')
         elif new_action_amount and int(new_action_amount) > 0:
             new_action_record = Action.objects.create(
